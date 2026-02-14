@@ -1,26 +1,71 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
+  --color-purple-deep: #1a1040;
+  --color-purple-mid: #2d1b69;
+  --color-purple-light: #4c3a8f;
+  --color-gold: #FFD700;
+  --color-gold-dark: #d4a900;
   --font-sans: var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+body {
+  background: linear-gradient(135deg, #1a1040 0%, #2d1b69 50%, #1e1250 100%);
+  color: #f0e6ff;
+  font-family: Arial, Helvetica, sans-serif;
+  min-height: 100vh;
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+.card {
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-radius: 1rem;
+  padding: 1rem;
+}
+
+.card-hover {
+  transition: all 0.2s ease;
+}
+.card-hover:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(255, 215, 0, 0.3);
+  transform: translateY(-1px);
+  box-shadow: 0 8px 24px rgba(100, 60, 180, 0.3);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, #FFD700 0%, #f0c000 100%);
+  color: #1a1040;
+  font-weight: 700;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0.75rem;
+  transition: all 0.2s ease;
+}
+.btn-primary:hover {
+  box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+  transform: translateY(-1px);
+}
+
+.badge {
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.875rem;
+  font-weight: 600;
+}
+.badge-done {
+  background: rgba(16, 185, 129, 0.2);
+  color: #6ee7b7;
+}
+.badge-pending {
+  background: rgba(255, 255, 255, 0.1);
+  color: #c4b5fd;
+}
+
+input[type="checkbox"] {
+  width: 1.25rem;
+  height: 1.25rem;
+  accent-color: #FFD700;
+  cursor: pointer;
 }
