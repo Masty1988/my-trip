@@ -49,3 +49,16 @@ export type Suggestion = {
   position: number;
   created_at: string;
 };
+
+export type Attraction = {
+  id: string;
+  trip_id: string;
+  name: string;
+  zone: string;
+  category: string;
+  height_min: number | null;
+  description: string | null;
+  tips: string | null;
+  is_priority: boolean;
+  created_at: string;
+};
