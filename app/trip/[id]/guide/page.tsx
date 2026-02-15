@@ -63,6 +63,12 @@ export default function GuidePage() {
         >
           📅 Guide
         </Link>
+        <Link
+          href={`/trip/${id}/plan`}
+          className="rounded-xl border border-white/10 bg-white/5 px-6 py-3 text-sm font-bold text-purple-200 transition-all hover:border-gold/30 hover:bg-white/10"
+        >
+          🗺️ Plan
+        </Link>
       </div>
 
       <ul className="space-y-3">

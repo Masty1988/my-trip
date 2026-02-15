@@ -56,6 +56,19 @@ create table suggestions (
   created_at timestamp with time zone default now()
 );
 
+create table attractions (
+  id uuid default gen_random_uuid() primary key,
+  trip_id uuid not null references trips(id) on delete cascade,
+  name text not null,
+  zone text not null,
+  category text not null,
+  height_min int,
+  description text,
+  tips text,
+  is_priority boolean not null default false,
+  created_at timestamp with time zone default now()
+);
+
 -- 2. Enable RLS with permissive policies (MVP - no auth)
 alter table trips enable row level security;
 alter table categories enable row level security;
@@ -72,6 +85,9 @@ alter table suggestions enable row level security;
 create policy "Allow all on days" on days for all using (true) with check (true);
 create policy "Allow all on zones" on zones for all using (true) with check (true);
 create policy "Allow all on suggestions" on suggestions for all using (true) with check (true);
+
+alter table attractions enable row level security;
+create policy "Allow all on attractions" on attractions for all using (true) with check (true);
 
 -- 3. Enable realtime
 alter publication supabase_realtime add table items;
@@ -247,4 +263,40 @@ begin
     (v_zone_id, 'Goûter stratégique', 'Sucre pour tenir', '~17h00', 2),
     (v_zone_id, 'La Parade', 'Stars on Parade', '~17h30', 3),
     (v_zone_id, 'Départ', 'Avant fermeture pour éviter bouchons', '~18h30', 4);
+end $$;
+
+-- 6. Seed attractions data
+do $$
+declare
+  v_trip_id uuid;
+begin
+  select id into v_trip_id from trips where name = '🏰 Opération Mickey' limit 1;
+
+  insert into attractions (trip_id, name, zone, category, height_min, tips, is_priority) values
+    -- FANTASYLAND
+    (v_trip_id, 'Peter Pan''s Flight', 'Fantasyland', 'tous_ensemble', null, 'PRIORITÉ #1 - File d''attente énorme, arriver dès l''ouverture', true),
+    (v_trip_id, 'It''s a Small World', 'Fantasyland', 'tous_ensemble', null, 'Bateau calme, chanson entêtante', false),
+    (v_trip_id, 'Le Carrousel de Lancelot', 'Fantasyland', 'tous_ensemble', null, null, false),
+    (v_trip_id, 'Le Pays des Contes de Fées', 'Fantasyland', 'tous_ensemble', null, 'Bateau paisible', false),
+    (v_trip_id, 'Mad Hatter''s Tea Cups', 'Fantasyland', 'tous_ensemble', null, 'Tasses qui tournent - attention estomac fragile', false),
+    (v_trip_id, 'Dumbo l''Éléphant Volant', 'Fantasyland', 'tous_ensemble', null, 'Classique, file souvent lente', false),
+    (v_trip_id, 'Blanche-Neige et les Sept Nains', 'Fantasyland', 'tous_ensemble', null, '⚠️ Un peu sombre, peut faire peur aux jumeaux', false),
+    -- ADVENTURELAND
+    (v_trip_id, 'Pirates des Caraïbes', 'Adventureland', 'tous_ensemble', null, 'Bateau, un peu sombre - tester avec les jumeaux', false),
+    -- FRONTIERLAND
+    (v_trip_id, 'Big Thunder Mountain', 'Frontierland', 'grand_seul', 102, 'Train de la mine, sensations fortes', false),
+    (v_trip_id, 'Rustler Roundup Shootin'' Gallery', 'Frontierland', 'tous_ensemble', null, 'Tir au pistolet laser', false),
+    (v_trip_id, 'Phantom Manor', 'Frontierland', 'tous_ensemble', null, '⚠️ Manoir hanté TRÈS sombre - probablement trop pour jumeaux 2,5 ans', false),
+    -- DISCOVERYLAND
+    (v_trip_id, 'Buzz Lightyear Laser Blast', 'Discoveryland', 'tous_ensemble', null, 'Tir au laser en nacelle - parfait pour le casse-cou', false),
+    (v_trip_id, 'Autopia', 'Discoveryland', 'tous_ensemble', null, 'Conduire des voitures - 1 adulte + enfant par voiture', false),
+    (v_trip_id, 'Orbitron', 'Discoveryland', 'tous_ensemble', null, 'Fusées qui tournent', false),
+    (v_trip_id, 'Les Mystères du Nautilus', 'Discoveryland', 'tous_ensemble', null, 'Visite à pied du sous-marin - pas de queue', false),
+    (v_trip_id, 'Star Tours', 'Discoveryland', 'grand_seul', null, 'Simulateur Star Wars - peut être intense', false),
+    -- MAIN STREET
+    (v_trip_id, 'Main Street Vehicles', 'Main Street', 'tous_ensemble', null, 'Vieux bus/voitures pour se déplacer', false),
+    (v_trip_id, 'Disneyland Railroad', 'Main Street', 'tous_ensemble', null, 'Train tour du parc - stratégique pour se déplacer et reposer les pieds', false),
+    -- SPECTACLES
+    (v_trip_id, 'La Parade', 'Main Street', 'spectacle', null, 'Stars on Parade vers 17h30', false),
+    (v_trip_id, 'Meet & Greet Personnages', 'Main Street', 'spectacle', null, 'Rencontrer Mickey, Minnie - les jumeaux vont adorer OU flipper', false);
 end $$;
