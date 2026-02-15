@@ -21,3 +21,31 @@ export type Item = {
   position: number;
   created_at: string;
 };
+
+export type Day = {
+  id: string;
+  trip_id: string;
+  name: string;
+  date: string;
+  position: number;
+  created_at: string;
+};
+
+export type Zone = {
+  id: string;
+  day_id: string;
+  name: string;
+  icon: string;
+  position: number;
+  created_at: string;
+};
+
+export type Suggestion = {
+  id: string;
+  zone_id: string;
+  title: string;
+  description: string | null;
+  time_hint: string | null;
+  position: number;
+  created_at: string;
+};
